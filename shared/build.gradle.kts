@@ -129,9 +129,7 @@ kotlin {
 //}
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon::class.java).all {
-
     if (name == "compileCommonMainKotlinMetadata") {
-
         kotlinOptions {
             allWarningsAsErrors = false
             enabled = false
@@ -140,9 +138,11 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon::class.java
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile::class.java).all {
-
     if (name == "compileIosMainKotlinMetadata") {
-        print(" mugamba $name")
+
+        compilerOptions {
+            enabled = false
+        }
 
         kotlinOptions{
             enabled = false
