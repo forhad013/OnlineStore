@@ -5,7 +5,7 @@ plugins {
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.jetbrains.compose")
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
 }
 
 kotlin {
@@ -44,29 +44,50 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        val commonMain by getting{
-         dependencies{
-             with(compose){
-                     implementation(ui)
-                     implementation(foundation)
-                     implementation(material3)
-                     implementation(runtime)
-             }
-         }
+        val commonMain by getting {
+            dependencies {
+                with(compose) {
+                    implementation(ui)
+                    implementation(foundation)
+                    implementation(material3)
+                    implementation(runtime)
+                }
+
+                with(libs) {
+                    implementation(kotlin.corotines)
+                    implementation(kotlin.atomicfu)
+                    implementation(ktor.core)
+                    implementation(ktor.client)
+                    implementation(ktor.serialization)
+                    implementation(ktor.logging)
+                    implementation(sql.delight.runtime)
+                    implementation(koin.core)
+                }
+            }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.andriod)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.sql.delight.android)
+            }
+        }
         val androidUnitTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
+            dependencies {
+                implementation(libs.ktor.client.ios)
+                implementation(libs.sql.delight.ios)
+            }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
@@ -85,6 +106,49 @@ kotlin {
 
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon::class.java).all {
+    if (name == "compileCommonMainKotlinMetadata") {
+        kotlinOptions {
+            allWarningsAsErrors = false
+            enabled = false
+        }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile::class.java).all {
+    if (name == "compileIosMainKotlinMetadata") {
+
+        compilerOptions {
+            enabled = false
+        }
+
+        kotlinOptions {
+            enabled = false
+            allWarningsAsErrors = false
+
+        }
+    }
+}
+
+
+android {
+    namespace = "com.greenrobotdev.onlinestore"
+    compileSdk = 33
+    defaultConfig {
+        minSdk = 26
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlin {
+        jvmToolchain(11)
+    }
+    kapt {
+        correctErrorTypes = true
+    }
+}
 
 
 //tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile::class.java).all {
@@ -127,47 +191,3 @@ kotlin {
 //        }
 //    }
 //}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon::class.java).all {
-    if (name == "compileCommonMainKotlinMetadata") {
-        kotlinOptions {
-            allWarningsAsErrors = false
-            enabled = false
-        }
-    }
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile::class.java).all {
-    if (name == "compileIosMainKotlinMetadata") {
-
-        compilerOptions {
-            enabled = false
-        }
-
-        kotlinOptions{
-            enabled = false
-            allWarningsAsErrors = false
-
-        }
-    }
-}
-
-
-android {
-    namespace = "com.greenrobotdev.onlinestore"
-    compileSdk = 33
-    defaultConfig {
-        minSdk = 26
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlin {
-        jvmToolchain(11)
-    }
-    kapt {
-        correctErrorTypes = true
-    }
-}

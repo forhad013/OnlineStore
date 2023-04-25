@@ -1,0 +1,58 @@
+[versions]
+# Define the dependency versions
+kotlin = "1.8.10"
+compose = "1.4.0"
+android = "8.0.0"
+jetbrain_jvm = "1.8.0"
+toolchain = "0.4.0"
+koin = "3.3.3"
+compose_activity = "1.7.1"
+ktor = "2.2.4"
+sql_delight = "1.5.5"
+kotlin_serialization = "1.4.1"
+coroutines_version = "1.6.4"
+atomicfu = "0.17.2"
+decompose_version = "1.0.0"
+decompose_extension_version = "1.0.0-compose-experimental"
+
+[libraries]
+# Define the libraries
+compose_ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose_material = { module = "androidx.compose.material:material", version.ref = "compose" }
+compose_tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose_icons = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
+compose_activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose_activity" }
+
+koin_android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin_core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+
+ktor_core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor_client = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor_logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor_client_andriod = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor" }
+ktor_client_okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor_client_ios = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor_serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+sql_delight_android = { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sql_delight" }
+sql_delight_ios = { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sql_delight" }
+sql_delight_runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sql_delight" }
+
+kotlin_serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlin_serialization" }
+kotlin_corotines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines_version" }
+kotlin_atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfu" }
+
+decompose = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlin_serialization" }
+
+[bundles]
+# Define bundles/groups of libraries
+compose = ["compose.ui", "compose.material", "compose.tooling", "compose.icons"]
+
+[plugins]
+android_application = { id = "com.android.application", version.ref = "android" }
+android_library = { id = "com.android.library", version.ref = "android" }
+kotlin_android = { id = "android", version.ref = "kotlin" }
+kotlin_multiplatfrom = { id = "multiplatform", version.ref = "kotlin" }
+jetbrain_compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+jetbrain_koltin = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrain_jvm" }
+toolchain = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "toolchain" }

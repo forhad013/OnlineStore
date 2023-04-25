@@ -50,5 +50,5 @@ dependencies {
         implementation(material3)
         implementation(runtime)
     }
-    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation(libs.compose.activity)
 }

@@ -18,5 +18,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "OnlineStore"
+
 include(":androidApp")
 include(":shared")

@@ -12,6 +12,15 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+}
+
 //tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.PodGenTask>().configureEach {
 //    doLast {
 //
@@ -43,14 +52,3 @@ tasks.register("clean", Delete::class) {
 //}
 
 
-
-
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    }
-}
