@@ -1,17 +1,24 @@
 package com.greenrobotdev.onlinestore
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.window.Application
 import androidx.compose.ui.window.ComposeUIViewController
-import platform.Foundation.NSHomeDirectory
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import com.greenrobotdev.onlinestore.di.initKoin
 import platform.UIKit.UIViewController
-
-//fun Main(): UIViewController  = ComposeUIViewController {
-//        App()
-//    }
-
+import androidx.compose.runtime.CompositionLocalProvider
+import com.greenrobotdev.onlinestore.screen.home.HomeScreen
 
 fun Main(): UIViewController = ComposeUIViewController {
-    HomeScreen()
+//    initKoin()
+//    HomeScreen()
+
+    val lifecycle = LifecycleRegistry()
+
+    CompositionLocalProvider() {
+        MaterialTheme {
+            HomeScreen()
+        }
+    }
+
 }
 

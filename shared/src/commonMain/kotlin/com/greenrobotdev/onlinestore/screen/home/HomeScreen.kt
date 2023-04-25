@@ -1,4 +1,4 @@
-package com.greenrobotdev.onlinestore
+package com.greenrobotdev.onlinestore.screen.home
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

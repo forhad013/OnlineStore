@@ -9,11 +9,14 @@ koin = "3.3.3"
 compose_activity = "1.7.1"
 ktor = "2.2.4"
 sql_delight = "1.5.5"
-kotlin_serialization = "1.4.1"
+kotlin_serialization = "1.8.21"
+kotlin_datetime = "0.4.0"
 coroutines_version = "1.6.4"
 atomicfu = "0.17.2"
 decompose_version = "1.0.0"
 decompose_extension_version = "1.0.0-compose-experimental"
+lifeCycle = "1.0.0"
+
 
 [libraries]
 # Define the libraries
@@ -34,25 +37,42 @@ ktor_client_okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.r
 ktor_client_ios = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor_serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-sql_delight_android = { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sql_delight" }
-sql_delight_ios = { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sql_delight" }
-sql_delight_runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sql_delight" }
+sql-delight_android = { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sql_delight" }
+sql-delight_ios = { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sql_delight" }
+sql-delight_runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sql_delight" }
+sql-delight_gradle = { group = "com.squareup.sqldelight", name = "gradle-plugin", version.ref = "sql_delight" }
 
 kotlin_serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlin_serialization" }
 kotlin_corotines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines_version" }
 kotlin_atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfu" }
+kotlin_datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlin_datetime" }
 
 decompose = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlin_serialization" }
+lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", version.ref = "lifeCycle" }
+
 
 [bundles]
 # Define bundles/groups of libraries
 compose = ["compose.ui", "compose.material", "compose.tooling", "compose.icons"]
 
 [plugins]
-android_application = { id = "com.android.application", version.ref = "android" }
-android_library = { id = "com.android.library", version.ref = "android" }
-kotlin_android = { id = "android", version.ref = "kotlin" }
-kotlin_multiplatfrom = { id = "multiplatform", version.ref = "kotlin" }
-jetbrain_compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+android-application = { id = "com.android.application", version.ref = "android" }
+cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+multiplatfrom = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-kept = { id = "org.jetbrains.kotlinx.kotlin-kapt",version.ref = "kotlin"  }
+
 jetbrain_koltin = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrain_jvm" }
 toolchain = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "toolchain" }
+android_library = { id = "com.android.library", version.ref = "android" }
+
+
+#cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+
+#multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+
+#compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+#android-application = { id = "com.android.application", version.ref = "agp" }
+#libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
+#buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
