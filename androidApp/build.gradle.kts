@@ -1,4 +1,4 @@
-plugins {
+ plugins {
     id("com.android.application")
     kotlin("android")
     id("org.jetbrains.compose")
@@ -20,7 +20,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.4"
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -37,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.addAll(arrayOf("--release", "11"))
+    }
 }
 
 dependencies {
@@ -51,4 +54,5 @@ dependencies {
         implementation(runtime)
     }
     implementation(libs.compose.activity)
+    implementation(libs.koin.android)
 }

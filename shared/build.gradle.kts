@@ -1,11 +1,14 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    kotlin("multiplatform")
-    kotlin("native.cocoapods")
-    id("com.android.library")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.multiplatfrom)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.cocoapods)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.serialization)
     id("kotlin-kapt")
+    id("com.squareup.sqldelight")
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -33,6 +36,11 @@ kotlin {
 //        }
 //    }
 
+//    ios {
+//        binaries {
+//            findTest(org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG)?.linkerOpts("-lsqlite3")
+//        }
+//    }
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
@@ -42,6 +50,7 @@ kotlin {
         framework {
             baseName = "shared"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
@@ -58,6 +67,7 @@ kotlin {
                 with(libs) {
                     implementation(kotlin.corotines)
                     implementation(kotlin.atomicfu)
+                    implementation(kotlin.datetime)
                     implementation(ktor.core)
                     implementation(ktor.client)
                     implementation(ktor.serialization)
@@ -87,6 +97,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.ios)
                 implementation(libs.sql.delight.ios)
+                implementation(libs.lifecycle)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
@@ -130,7 +141,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile::class.java
     }
 }
 
-
 android {
     namespace = "com.greenrobotdev.onlinestore"
     compileSdk = 33
@@ -147,6 +157,17 @@ android {
     }
     kapt {
         correctErrorTypes = true
+    }
+}
+
+val sqldelight_db_name = "StoreDatabase"
+val sqldelight_db_package_name = "com.example.templatekmm.shared.cache"
+val sqldelight_db_sourceset = "sqldelight"
+
+sqldelight {
+    database(sqldelight_db_name) {
+        packageName = sqldelight_db_package_name
+        sourceFolders = listOf(sqldelight_db_sourceset)
     }
 }
 

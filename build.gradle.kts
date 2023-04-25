@@ -1,25 +1,36 @@
 plugins {
     //trick: for the same plugin versions in all sub-modules
-    id("com.android.application").version("8.0.0").apply(false)
-    id("com.android.library").version("8.0.0").apply(false)
-    kotlin("android").version("1.8.10").apply(false)
-    kotlin("multiplatform").version("1.8.10").apply(false)
-    id("org.jetbrains.compose") version "1.4.0" apply false
-    id("org.jetbrains.kotlin.jvm") version "1.8.0" apply false
+    alias(libs.plugins.multiplatfrom).apply(false)
+    alias(libs.plugins.compose).apply(false)
+    alias(libs.plugins.cocoapods).apply(false)
+    alias(libs.plugins.android.application).apply(false)
+//    id("com.android.application").version("8.0.0").apply(false)
+//    id("com.android.library").version("8.0.0").apply(false)
+//    kotlin("android").version("1.8.10").apply(false)
+//    kotlin("multiplatform").version("1.8.10").apply(false)
+//    id("org.jetbrains.compose") version "1.4.0" apply false
+//    id("org.jetbrains.kotlin.jvm") version "1.8.0" apply false
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.sql.delight.gradle)
+        classpath("com.android.tools.build:gradle:8.0.0")
+    }
 }
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    }
-}
+//allprojects {
+//    repositories {
+//        google()
+//        mavenCentral()
+//        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+//        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+//    }
+//}
 
 //tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.PodGenTask>().configureEach {
 //    doLast {
