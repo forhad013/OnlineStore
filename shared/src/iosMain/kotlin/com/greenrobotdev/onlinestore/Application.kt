@@ -9,10 +9,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import com.greenrobotdev.onlinestore.screen.home.HomeScreen
 
 fun Main(): UIViewController = ComposeUIViewController {
-//    initKoin()
-//    HomeScreen()
-
-    val lifecycle = LifecycleRegistry()
 
     CompositionLocalProvider() {
         MaterialTheme {

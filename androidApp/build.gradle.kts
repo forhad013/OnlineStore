@@ -55,4 +55,5 @@ dependencies {
     }
     implementation(libs.compose.activity)
     implementation(libs.koin.android)
+    implementation(libs.arkivanov.decompose.android)
 }

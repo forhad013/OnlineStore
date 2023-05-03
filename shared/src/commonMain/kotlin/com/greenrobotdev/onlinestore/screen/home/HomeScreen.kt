@@ -18,6 +18,6 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-internal fun HomeScreen(){
+fun HomeScreen(){
     Text("home")
 }
