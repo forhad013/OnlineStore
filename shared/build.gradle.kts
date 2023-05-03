@@ -75,6 +75,13 @@ kotlin {
                     implementation(sql.delight.runtime)
                     implementation(koin.core)
                 }
+
+                with(libs.arkivanov){
+                    implementation(decompose)
+                    implementation(decompose.extension)
+                    implementation(lifecycle)
+                    implementation(parcelable)
+                }
             }
         }
         val commonTest by getting {
@@ -97,7 +104,6 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.ios)
                 implementation(libs.sql.delight.ios)
-                implementation(libs.lifecycle)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)

@@ -13,9 +13,10 @@ kotlin_serialization = "1.8.21"
 kotlin_datetime = "0.4.0"
 coroutines_version = "1.6.4"
 atomicfu = "0.17.2"
-decompose_version = "1.0.0"
+decompose_version = "2.0.0-alpha-01"
 decompose_extension_version = "1.0.0-compose-experimental"
 lifeCycle = "1.0.0"
+arkivanov_parcelable= "1.0.0"
 
 
 [libraries]
@@ -47,9 +48,11 @@ kotlin_corotines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines
 kotlin_atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfu" }
 kotlin_datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlin_datetime" }
 
-decompose = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlin_serialization" }
-lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", version.ref = "lifeCycle" }
-
+arkivanov_decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose_version" }
+arkivanov_decompose-android = { group = "com.arkivanov.decompose", name = "extensions-android", version.ref = "decompose_version" }
+arkivanov_decompose-extension = { group = "com.arkivanov.decompose", name = "extensions-compose-jetbrains", version.ref = "decompose_extension_version" }
+arkivanov_lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", version.ref = "lifeCycle" }
+arkivanov_parcelable = { group = "com.arkivanov.essenty", name = "parcelable", version.ref = "arkivanov_parcelable" }
 
 [bundles]
 # Define bundles/groups of libraries
