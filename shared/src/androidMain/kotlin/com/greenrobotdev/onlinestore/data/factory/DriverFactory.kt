@@ -1,7 +1,7 @@
 package com.greenrobotdev.onlinestore.data.factory
 
 import android.content.Context
-import com.example.templatekmm.shared.cache.StoreDatabase
+import com.greenrobotdev.onlinestore.shared.cache.StoreDatabase
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import io.ktor.client.*

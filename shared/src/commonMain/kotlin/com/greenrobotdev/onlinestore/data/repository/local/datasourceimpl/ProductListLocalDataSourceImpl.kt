@@ -1,7 +1,7 @@
 import com.greenrobotdev.onlinestore.data.mapper.asDomainProductEntity
 import com.greenrobotdev.onlinestore.data.repository.local.datasource.ProductListLocalDataSource
 import com.greenrobotdev.onlinestore.entity.Product
-import com.example.templatekmm.shared.cache.StoreDatabase
+import com.greenrobotdev.onlinestore.shared.cache.StoreDatabase
 
 
 class ProductListLocalDataSourceImpl(StoreDatabase: StoreDatabase) : ProductListLocalDataSource {
