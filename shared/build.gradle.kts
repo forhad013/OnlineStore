@@ -1,12 +1,12 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    alias(libs.plugins.multiplatfrom)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.cocoapods)
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.serialization)
-    id("kotlin-kapt")
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")
+    id("com.android.library")
+    id("org.jetbrains.compose")
+    id ("kotlin-kapt")
+    kotlin("plugin.serialization")
     id("com.squareup.sqldelight")
     id("kotlin-parcelize")
 }
@@ -74,6 +74,15 @@ kotlin {
                     implementation(ktor.logging)
                     implementation(sql.delight.runtime)
                     implementation(koin.core)
+                    implementation(decompose.router)
+                    implementation(molecule.runtime)
+                }
+
+                with(libs.arkivanov){
+                    implementation(decompose)
+                    implementation(decompose.extension)
+                    implementation(lifecycle)
+                    implementation(parcelable)
                 }
             }
         }
@@ -97,7 +106,6 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.ios)
                 implementation(libs.sql.delight.ios)
-                implementation(libs.lifecycle)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
@@ -161,7 +169,7 @@ android {
 }
 
 val sqldelight_db_name = "StoreDatabase"
-val sqldelight_db_package_name = "com.example.templatekmm.shared.cache"
+val sqldelight_db_package_name = "com.greenrobotdev.onlinestore.shared.cache"
 val sqldelight_db_sourceset = "sqldelight"
 
 sqldelight {

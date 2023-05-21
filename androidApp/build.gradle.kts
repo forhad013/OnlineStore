@@ -18,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
     packaging {
         resources {
@@ -55,4 +55,6 @@ dependencies {
     }
     implementation(libs.compose.activity)
     implementation(libs.koin.android)
+    implementation(libs.decompose.router)
+    implementation(libs.arkivanov.decompose)
 }

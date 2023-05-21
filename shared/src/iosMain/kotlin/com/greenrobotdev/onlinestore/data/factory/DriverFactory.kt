@@ -1,6 +1,6 @@
 package com.greenrobotdev.onlinestore.data.factory
 
-import com.example.templatekmm.shared.cache.StoreDatabase
+import com.greenrobotdev.onlinestore.shared.cache.StoreDatabase
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 import io.ktor.client.*
