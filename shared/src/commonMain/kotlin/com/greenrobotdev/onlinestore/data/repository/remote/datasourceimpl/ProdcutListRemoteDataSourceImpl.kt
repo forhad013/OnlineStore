@@ -12,8 +12,8 @@ class ProductListRemoteDataSourceImpl(
     private val httpClient: HttpClient
 ) : ProductListRemoteDataSource {
 
-    override suspend fun getProductListFromRemote(url: String, page: Int): List<ProductDTO> {
-        return httpClient.get(urlString = "${APIConstants.BASE_URL}$url") {
+    override suspend fun getProductListFromRemote(): List<ProductDTO> {
+        return httpClient.get(urlString = "${APIConstants.BASE_URL}/products") {
             contentType(ContentType.Application.Json)
         }.body()
     }

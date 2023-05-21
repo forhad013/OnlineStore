@@ -15,6 +15,7 @@ buildscript {
         classpath("org.jetbrains.compose:compose-gradle-plugin:1.4.0")
         classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.8.10")
+        classpath(libs.molecule.gradle.plugin)
     }
 }
 

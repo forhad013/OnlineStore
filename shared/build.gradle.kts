@@ -75,6 +75,7 @@ kotlin {
                     implementation(sql.delight.runtime)
                     implementation(koin.core)
                     implementation(decompose.router)
+                    implementation(molecule.runtime)
                 }
 
                 with(libs.arkivanov){
