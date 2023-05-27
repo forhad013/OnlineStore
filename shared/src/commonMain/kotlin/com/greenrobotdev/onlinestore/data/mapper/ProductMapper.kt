@@ -1,7 +1,7 @@
 package com.greenrobotdev.onlinestore.data.mapper
 
 import com.greenrobotdev.onlinestore.data.model.ProductDTO
-import com.greenrobotdev.onlinestore.entity.Product
+import com.greenrobotdev.onlinestore.domain.entity.Product
 
 fun asDomainProductEntity(
     id: Long,

@@ -1,4 +1,6 @@
-package com.greenrobotdev.onlinestore.entity
+package com.greenrobotdev.onlinestore.domain.entity
+
+import com.arkivanov.essenty.parcelable.Parcelize
 
 data class Product(
     val id: Long,

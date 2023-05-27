@@ -13,32 +13,6 @@ import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.*
 import com.greenrobotdev.onlinestore.screen.productDetails.ProductDetails
 import com.greenrobotdev.onlinestore.screen.productList.ProductListScreen
 
-//class Greeting {
-//    private val platform: Platform = getPlatform()
-//
-//    fun greet(): String {
-//        return "Hello, ${platform.name}!"
-//    }
-//}
-//
-//@Composable
-//fun App(){
-//   HomeScreen()
-//}
-
-//
-//@Composable
-//internal fun HomeScreen(){
-//    Text("home")
-//}
-//
-//
-//@Composable
-//fun App(){
-//    HomeScreen()
-//}
-
-
 @Composable
 fun HomeScreen() {
     val router: Router<StoryHomeScreen> = rememberRouter(StoryHomeScreen::class, listOf(StoryHomeScreen.List))
