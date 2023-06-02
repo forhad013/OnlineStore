@@ -5,7 +5,8 @@ compose = "1.4.0"
 android = "8.0.0"
 jetbrain_jvm = "1.8.0"
 toolchain = "0.4.0"
-koin = "3.3.3"
+koin = "3.4.0"
+koin_compose = "1.0.2"
 compose_activity = "1.7.1"
 ktor = "2.2.4"
 sql_delight = "1.5.5"
@@ -30,6 +31,7 @@ compose_activity = { group = "androidx.activity", name = "activity-compose", ver
 
 koin_android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin_core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin_compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin_compose" }
 
 ktor_core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor_client = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }

@@ -13,11 +13,12 @@ class ProductListRepositoryImpl(
     private val productListLocalDataSource: ProductListLocalDataSource
 ) : ProductListRepository {
 
-    override suspend fun getProductList(url: String, page: Int): Flow<Response<List<Product>>> =
+    override suspend fun getProductList(): Flow<Response<List<Product>>> =
         singleSourceOfTruth(
             getLocalData = { getProductListFromLocal() },
             getRemoteData = {
-                productListRemoteDataSource.getProductListFromRemote().map { productDTO -> productDTO.asDomainModel()  }
+                            emptyList()
+           //     productListRemoteDataSource.getProductListFromRemote().map { productDTO -> productDTO.asDomainModel()  }
             },
             saveDataToLocal = { productList ->
                 productListLocalDataSource.deleteProductListFromDB()
@@ -26,10 +27,6 @@ class ProductListRepositoryImpl(
         )
 
     private suspend fun getProductListFromLocal(): List<Product> {
-        var movieList: List<Product> = emptyList()
-
-            movieList = productListLocalDataSource.getProductListFromLocal()
-
-        return movieList
+        return productListLocalDataSource.getProductListFromLocal()
     }
 }
