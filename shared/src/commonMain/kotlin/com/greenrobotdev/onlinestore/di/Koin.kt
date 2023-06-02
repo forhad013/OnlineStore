@@ -6,7 +6,6 @@ import com.greenrobotdev.onlinestore.data.repository.local.datasource.ProductLis
 import com.greenrobotdev.onlinestore.data.repository.remote.datasource.ProductListRemoteDataSource
 import com.greenrobotdev.onlinestore.data.repository.remote.datasourceimpl.ProductListRemoteDataSourceImpl
 import com.greenrobotdev.onlinestore.domain.repository.ProductListRepository
-import com.greenrobotdev.onlinestore.domain.usecases.ProductListUseCase
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
@@ -27,6 +26,10 @@ val dataSourceModule = module {
     single<ProductListRepository> { ProductListRepositoryImpl(get(), get()) }
 }
 
-val useCasesModule: Module = module {
-    factory { ProductListUseCase(get()) }
-}
+//val useCasesModule: Module = module {
+//    factory { ProductListUseCase(get()) }
+//}
+//
+//val viewModelModule = module {
+//    single { ProductListViewModel (get()) }
+//}

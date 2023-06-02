@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -11,11 +12,16 @@ plugins {
     id("kotlin-parcelize")
 }
 
+compose {
+    kotlinCompilerPlugin.set(dependencies.compiler.forKotlin("1.8.20"))
+    kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=1.8.21")
+}
+
 kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }
@@ -157,25 +163,33 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlin {
         jvmToolchain(11)
     }
     kapt {
         correctErrorTypes = true
     }
+
+    val sqldelight_db_name = "StoreDatabase"
+    val sqldelight_db_package_name = "com.greenrobotdev.onlinestore.shared.cache"
+    val sqldelight_db_sourceset = "sqldelight"
+
+    sqldelight {
+        database(sqldelight_db_name) {
+            packageName = sqldelight_db_package_name
+            sourceFolders = listOf(sqldelight_db_sourceset)
+        }
+    }
 }
 
-val sqldelight_db_name = "StoreDatabase"
-val sqldelight_db_package_name = "com.greenrobotdev.onlinestore.shared.cache"
-val sqldelight_db_sourceset = "sqldelight"
 
-sqldelight {
-    database(sqldelight_db_name) {
-        packageName = sqldelight_db_package_name
-        sourceFolders = listOf(sqldelight_db_sourceset)
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs::class.java).configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
