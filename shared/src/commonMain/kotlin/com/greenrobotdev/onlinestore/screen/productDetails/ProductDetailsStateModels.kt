@@ -1,4 +1,4 @@
-package com.greenrobotdev.onlinestore.screen.productList
+package com.greenrobotdev.onlinestore.screen.productDetails
 
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
@@ -7,10 +7,7 @@ import com.greenrobotdev.onlinestore.domain.entity.Product
 val Loading: Nothing? = null
 
 @Parcelize
-data class ProductListState(
-  val products: List<Product>? = Loading
+data class ProductDetailsState(
+  val product: Product? = Loading
 ) : Parcelable
 
-sealed interface ProductListEvent {
-  object Refresh: ProductListEvent
-}
