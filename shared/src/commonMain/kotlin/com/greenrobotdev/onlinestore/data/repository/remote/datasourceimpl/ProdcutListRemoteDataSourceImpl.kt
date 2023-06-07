@@ -2,12 +2,9 @@ package com.greenrobotdev.onlinestore.data.repository.remote.datasourceimpl
 
 import com.greenrobotdev.onlinestore.data.model.ProductDTO
 import com.greenrobotdev.onlinestore.data.repository.remote.datasource.ProductListRemoteDataSource
-import com.greenrobotdev.onlinestore.data.util.APIConstants
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import com.greenrobotdev.onlinestore.data.util.get
+import com.greenrobotdev.onlinestore.utils.get
+import io.ktor.client.HttpClient
+import io.ktor.http.path
 
 class ProductListRemoteDataSourceImpl(
     private val httpClient: HttpClient

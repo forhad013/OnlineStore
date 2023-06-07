@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.greenrobotdev.onlinestore.data.base.Response
 import com.greenrobotdev.onlinestore.data.mapper.asDomainModel
+import com.greenrobotdev.onlinestore.data.model.ProductDTO
 import com.greenrobotdev.onlinestore.data.repository.ProductListRepositoryImpl
 import com.greenrobotdev.onlinestore.data.repository.remote.datasourceimpl.ProductListRemoteDataSourceImpl
 import com.greenrobotdev.onlinestore.domain.repository.ProductListRepository
@@ -32,7 +33,5 @@ fun ProductListUseCase(
             products = result.map { it.asDomainModel() }
         )
     }
-
-    println("sonna ${ state.products.toString() }")
     return state
 }

@@ -14,6 +14,7 @@ import androidx.core.view.WindowCompat
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.defaultComponentContext
 import com.greenrobotdev.onlinestore.screen.home.HomeScreen
+import com.greenrobotdev.onlinestore.theme.AppTheme
 import io.github.xxfast.decompose.LocalComponentContext
 
 class MainActivity : ComponentActivity() {
@@ -25,11 +26,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CompositionLocalProvider(LocalComponentContext provides rootComponentContext) {
-                MyApplicationTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
+                AppTheme {
+                    Surface(tonalElevation = 5.dp) {
                         HomeScreen()
                     }
                 }
