@@ -8,6 +8,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import io.github.xxfast.decompose.LocalComponentContext
 import platform.UIKit.UIViewController
 import com.greenrobotdev.onlinestore.screen.home.HomeScreen
+import com.greenrobotdev.onlinestore.theme.AppTheme
 import platform.Foundation.NSHomeDirectory
 
 //fun Main(): UIViewController {
@@ -23,9 +24,13 @@ fun Main(): UIViewController = ComposeUIViewController {
     val rootComponentContext = DefaultComponentContext(lifecycle = lifecycle)
 
     CompositionLocalProvider(LocalComponentContext provides rootComponentContext) {
-        MaterialTheme {
-            HomeScreen()
+        AppTheme {
+            Surface(tonalElevation = 5.dp) {
+                HomeScreen()
+            }
         }
     }
 }
+
+
 

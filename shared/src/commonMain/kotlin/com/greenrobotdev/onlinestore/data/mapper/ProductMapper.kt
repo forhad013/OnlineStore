@@ -27,7 +27,7 @@ fun List<ProductDTO>?.asDomainMovieList(): List<Product> {
     return this?.map { it.asDomainModel() } ?: emptyList()
 }
 
-/** Convert remote response to [Movie] Domain objects*/
+/** Convert remote response to [Product] Domain objects*/
 fun ProductDTO.asDomainModel() = Product(
     id = id,
     title = title,

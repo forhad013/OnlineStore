@@ -21,6 +21,8 @@ arkivanov_parcelable= "1.0.0"
 decompose-router = "0.1.0"
 molecule = "0.9.0"
 
+qdsfdhvh-image-loader = "1.4.0"
+
 [libraries]
 # Define the libraries
 compose_ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -59,6 +61,8 @@ arkivanov_lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", ver
 arkivanov_parcelable = { group = "com.arkivanov.essenty", name = "parcelable", version.ref = "arkivanov_parcelable" }
 molecule-gradle-plugin = { module = "app.cash.molecule:molecule-gradle-plugin", version.ref = "molecule" }
 molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
+
+qdsfdhvh-image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "qdsfdhvh-image-loader" }
 
 [bundles]
 # Define bundles/groups of libraries

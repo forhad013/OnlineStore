@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -90,6 +87,8 @@ kotlin {
                     implementation(lifecycle)
                     implementation(parcelable)
                 }
+
+                implementation(libs.qdsfdhvh.image.loader)
             }
         }
         val commonTest by getting {
