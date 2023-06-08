@@ -1,4 +1,4 @@
-package com.greenrobotdev.onlinestore.theme
+package com.greenrobotdev.onlinestore.ui
 
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,4 +18,4 @@ class RoundedCornerShape(
     )
 )
 
-internal val LocalRoundedCornerShapes = staticCompositionLocalOf { com.greenrobotdev.onlinestore.theme.RoundedCornerShape() }
+internal val LocalRoundedCornerShapes = staticCompositionLocalOf { com.greenrobotdev.onlinestore.ui.RoundedCornerShape() }
