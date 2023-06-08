@@ -109,7 +109,9 @@ fun ProductListView(
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
             }
@@ -145,7 +147,7 @@ fun ProductItem(
 ){
     Card(
         onClick = { onProductSelect(item) },
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.small,
         modifier = Modifier.padding(8.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
@@ -166,7 +168,7 @@ fun ProductItem(
         ) {
             Text(
                 text = item.title,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 fontWeight = FontWeight.Light
@@ -176,7 +178,7 @@ fun ProductItem(
 
             Text(
                 text = price,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
         }
