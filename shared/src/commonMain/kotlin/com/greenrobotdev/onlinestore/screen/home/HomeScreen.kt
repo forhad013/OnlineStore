@@ -7,8 +7,10 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.Details
 import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.List
+import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.Wishlist
 import com.greenrobotdev.onlinestore.screen.productDetails.ProductDetailsScreen
 import com.greenrobotdev.onlinestore.screen.productList.ProductListScreen
+import com.greenrobotdev.onlinestore.screen.wishlist.WishlistScreen
 import io.github.xxfast.decompose.router.Router
 import io.github.xxfast.decompose.router.content.RoutedContent
 import io.github.xxfast.decompose.router.rememberRouter
@@ -24,12 +26,18 @@ fun HomeScreen() {
     ) { screen ->
         when (screen) {
             List -> ProductListScreen(
-                onProductSelect = { router.push(Details(it)) }
+                onProductSelect = { router.push(Details(it)) },
+                wishlistSelect = { router.push(Wishlist)}
             )
 
             is Details -> ProductDetailsScreen(
                 product = screen.product,
                 onBack = { router.pop() }
+            )
+
+            is Wishlist -> WishlistScreen(
+                onBack = { router.pop() },
+                onProductSelect = { router.push(Details(it)) }
             )
         }
     }
