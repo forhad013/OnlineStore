@@ -9,4 +9,6 @@ sealed class StoryHomeScreen: Parcelable {
   object List: StoryHomeScreen()
 
   data class   Details(val product: Product): StoryHomeScreen()
+
+  object Wishlist: StoryHomeScreen()
 }

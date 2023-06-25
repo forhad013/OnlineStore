@@ -2,6 +2,7 @@ package com.greenrobotdev.onlinestore.screen.productList
 
 import app.cash.molecule.RecompositionClock.Immediate
 import app.cash.molecule.moleculeFlow
+import com.greenrobotdev.onlinestore.data.favoriteStore
 import com.greenrobotdev.onlinestore.data.repository.remote.datasourceimpl.ProductListRemoteDataSourceImpl
 import com.greenrobotdev.onlinestore.navigation.ViewModel
 import com.greenrobotdev.onlinestore.utils.HttpClient
@@ -22,7 +23,7 @@ class ProductListViewModel(
 
   val states by lazy {
     moleculeFlow(Immediate) {
-      ProductListUseCase(initialState, webService, eventsFlow)
+      ProductListUseCase(initialState, webService, favoriteStore, eventsFlow)
     }
       .onEach { state -> savedState.set(state) }
       .stateIn(this, SharingStarted.Lazily, initialState)

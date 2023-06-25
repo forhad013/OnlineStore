@@ -1,4 +1,4 @@
-package com.greenrobotdev.onlinestore.screen.productList
+package com.greenrobotdev.onlinestore.screen.wishlist
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -9,35 +9,28 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -45,73 +38,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.greenrobotdev.onlinestore.domain.entity.Product
-import com.greenrobotdev.onlinestore.utils.statusBarPadding
 import com.seiko.imageloader.rememberAsyncImagePainter
 import io.github.xxfast.decompose.router.rememberViewModel
 
 @Composable
-fun ProductListScreen(
-    onProductSelect: (product: Product) -> Unit,
-    wishlistSelect: () -> Unit,
+fun WishlistScreen(
+    onBack: () -> Unit,
+    onProductSelect: (product: Product) -> Unit
 ) {
-
-    val viewModel: ProductListViewModel =
-        rememberViewModel(ProductListViewModel::class) { savedState ->
-            ProductListViewModel(savedState)
+    val viewModel: WishListViewModel =
+        rememberViewModel(WishListViewModel::class) { savedState ->
+            WishListViewModel(savedState)
         }
 
-    val state: ProductListState by viewModel.states.collectAsState()
+    val state: WishListState by viewModel.states.collectAsState()
 
-
-    ProductListView(
+    WishlistView(
         state = state,
         onProductSelect = onProductSelect,
-        onRefresh = { viewModel.onRefresh() },
-        onWishList = wishlistSelect
+        onBack = onBack
     )
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductListView(
-    state: ProductListState,
+fun WishlistView(
+    state: WishListState,
     onProductSelect: (product: Product) -> Unit,
-    onRefresh: () -> Unit,
-    onWishList: () -> Unit,
+    onBack: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(text = "Online Store")
-                },
-                actions = {
-                    IconButton(onClick = onRefresh) {
+            TopAppBar(
+                title = { Text("Wishlist") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
                         Icon(
-                            Icons.Rounded.Refresh,
-                            contentDescription = null
+                            Icons.Rounded.ArrowBack, contentDescription = null
                         )
                     }
-
-                    IconButton(onClick = onWishList) {
-                        BadgedBox(
-                            badge = {
-                                if (state.numberOfFavorite > 0)
-                                    Badge {
-                                        Text(state.numberOfFavorite.toString())
-                                    }
-                            }
-                        ) {
-                            Icon(
-                                Icons.Filled.Favorite,
-                                contentDescription = "Favorite"
-                            )
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .windowInsetsPadding(WindowInsets.statusBarPadding)
+                }
             )
         },
         modifier = Modifier
@@ -123,20 +90,20 @@ fun ProductListView(
                 .padding(scaffoldPadding)
         ) {
 
-            if (state.products != Loading) ProductList(
+            if (state.products != nothing) ProductList(
                 products = state.products,
                 onProductSelect = onProductSelect
             )
 
             AnimatedVisibility(
-                visible = state.products == Loading,
+                visible = state.products == nothing,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    Text("Such empty")
                 }
             }
         }
