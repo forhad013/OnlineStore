@@ -27,8 +27,7 @@ fun ProductListUseCase(
         if (refreshes == 0 && products != Loading) return@LaunchedEffect
         products = Loading
 
-        val result =
-            productListRepository.getProductListFromRemote().getOrNull() ?: return@LaunchedEffect
+        val result = productListRepository.getProductListFromRemote().getOrNull() ?: return@LaunchedEffect
 
         products = result.map { it.asDomainModel() }
     }

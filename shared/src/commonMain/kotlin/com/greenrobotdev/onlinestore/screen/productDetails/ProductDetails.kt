@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.BottomAppBar
@@ -34,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -49,15 +52,18 @@ fun ProductDetailsScreen(
     onBack: () -> Unit,
 ) {
 
-    val viewModel: ProductDetailsViewModel = rememberViewModel(ProductDetailsViewModel::class) { savedState ->
-        ProductDetailsViewModel(savedState, product)
-    }
+    val viewModel: ProductDetailsViewModel =
+        rememberViewModel(ProductDetailsViewModel::class) { savedState ->
+            ProductDetailsViewModel(savedState, product)
+        }
 
     val state: ProductDetailsState by viewModel.states.collectAsState()
 
     ProductDetailsView(
         onBack = onBack,
         product = state.product,
+        onFavoritePressed = { viewModel.onFavoriteButtonPressed() },
+        isSaved = state.isSaved
     )
 
 }
@@ -67,6 +73,8 @@ fun ProductDetailsScreen(
 fun ProductDetailsView(
     product: Product?,
     onBack: () -> Unit,
+    onFavoritePressed: () -> Unit,
+    isSaved: Boolean
 ) {
     Scaffold(
         topBar = {
@@ -86,7 +94,7 @@ fun ProductDetailsView(
             BottomAppBar(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBarPadding),
-                containerColor =  MaterialTheme.colorScheme.secondaryContainer,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -94,9 +102,12 @@ fun ProductDetailsView(
                 ) {
 
                     IconButton(
-                        onClick = {},
+                        onClick = onFavoritePressed,
                     ) {
-                        Icon(Icons.Rounded.FavoriteBorder, contentDescription = null)
+                        Icon(
+                            imageVector = if (isSaved) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                            contentDescription = null
+                        )
                     }
 
                     Button(
