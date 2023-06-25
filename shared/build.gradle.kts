@@ -79,6 +79,7 @@ kotlin {
                     implementation(koin.core)
                     implementation(decompose.router)
                     implementation(molecule.runtime)
+                    implementation(libs.kstore)
                 }
 
                 with(libs.arkivanov){
@@ -101,6 +102,7 @@ kotlin {
                 implementation(libs.ktor.client.andriod)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.sql.delight.android)
+                implementation(libs.kstore.file)
             }
         }
         val androidUnitTest by getting
@@ -111,6 +113,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.ios)
                 implementation(libs.sql.delight.ios)
+                implementation(libs.kstore.file)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
