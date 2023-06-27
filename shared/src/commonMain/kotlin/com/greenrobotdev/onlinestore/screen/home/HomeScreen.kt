@@ -5,6 +5,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slid
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
+import com.greenrobotdev.onlinestore.screen.cart.CartScreen
 import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.Details
 import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.List
 import com.greenrobotdev.onlinestore.screen.home.StoryHomeScreen.Wishlist
@@ -27,7 +28,8 @@ fun HomeScreen() {
         when (screen) {
             List -> ProductListScreen(
                 onProductSelect = { router.push(Details(it)) },
-                wishlistSelect = { router.push(Wishlist)}
+                wishlistSelect = { router.push(Wishlist) },
+                cartSelected = { router.push(StoryHomeScreen.Cart) }
             )
 
             is Details -> ProductDetailsScreen(
@@ -36,6 +38,11 @@ fun HomeScreen() {
             )
 
             is Wishlist -> WishlistScreen(
+                onBack = { router.pop() },
+                onProductSelect = { router.push(Details(it)) }
+            )
+
+            is StoryHomeScreen.Cart -> CartScreen(
                 onBack = { router.pop() },
                 onProductSelect = { router.push(Details(it)) }
             )

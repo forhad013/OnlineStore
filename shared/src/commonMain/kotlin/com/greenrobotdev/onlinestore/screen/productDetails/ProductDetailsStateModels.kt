@@ -15,7 +15,8 @@ data class ProductDetailsState(
 
 
 sealed interface ProductDetailsEvent {
-  object OnFavoriteButtonPressed: ProductDetailsEvent
+  object OnFavoritePressed: ProductDetailsEvent
+  object OnAddToCartPressed: ProductDetailsEvent
 }
 
 

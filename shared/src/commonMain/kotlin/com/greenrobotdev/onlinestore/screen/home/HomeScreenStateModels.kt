@@ -11,4 +11,5 @@ sealed class StoryHomeScreen: Parcelable {
   data class   Details(val product: Product): StoryHomeScreen()
 
   object Wishlist: StoryHomeScreen()
+  object Cart: StoryHomeScreen()
 }
