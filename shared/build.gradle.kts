@@ -79,7 +79,8 @@ kotlin {
                     implementation(koin.core)
                     implementation(decompose.router)
                     implementation(molecule.runtime)
-                    implementation(libs.kstore)
+                    implementation(kstore)
+                    implementation(swipe.refresh)
                 }
 
                 with(libs.arkivanov){
@@ -114,6 +115,7 @@ kotlin {
                 implementation(libs.ktor.client.ios)
                 implementation(libs.sql.delight.ios)
                 implementation(libs.kstore.file)
+                implementation(libs.swipe.refresh)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)

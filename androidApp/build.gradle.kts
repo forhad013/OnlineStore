@@ -58,6 +58,7 @@ dependencies {
         implementation(runtime)
     }
     implementation(libs.compose.activity)
+    implementation(libs.swipe.refresh)
     implementation(libs.koin.android)
     implementation(libs.decompose.router)
     implementation(libs.arkivanov.decompose)

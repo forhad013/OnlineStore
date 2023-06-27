@@ -2,6 +2,7 @@ package com.greenrobotdev.onlinestore.screen.productDetails
 
 import app.cash.molecule.RecompositionClock.Immediate
 import app.cash.molecule.moleculeFlow
+import com.greenrobotdev.onlinestore.data.cartStore
 import com.greenrobotdev.onlinestore.data.favoriteStore
 import com.greenrobotdev.onlinestore.domain.entity.Product
 import com.greenrobotdev.onlinestore.navigation.ViewModel
@@ -22,14 +23,18 @@ class ProductDetailsViewModel(
 
   val states by lazy {
     moleculeFlow(Immediate) {
-      ProductDetailsUseCase(initialState, favoriteStore, eventsFlow)
+      ProductDetailsUseCase(initialState, favoriteStore, cartStore,eventsFlow)
     }
       .onEach { state -> savedState.set(state) }
       .stateIn(this, SharingStarted.Lazily, initialState)
   }
 
   fun onFavoriteButtonPressed(){
-    launch { eventsFlow.emit(ProductDetailsEvent.OnFavoriteButtonPressed) }
+    launch { eventsFlow.emit(ProductDetailsEvent.OnFavoritePressed) }
+  }
+
+  fun onAddToCartPressed(){
+    launch { eventsFlow.emit(ProductDetailsEvent.OnAddToCartPressed) }
   }
 
 }

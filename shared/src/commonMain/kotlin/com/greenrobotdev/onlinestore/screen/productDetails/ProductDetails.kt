@@ -63,7 +63,8 @@ fun ProductDetailsScreen(
         onBack = onBack,
         product = state.product,
         onFavoritePressed = { viewModel.onFavoriteButtonPressed() },
-        isSaved = state.isSaved
+        onAddToCartPressed = { viewModel.onAddToCartPressed() },
+        isSaved = state.isSaved,
     )
 
 }
@@ -74,6 +75,7 @@ fun ProductDetailsView(
     product: Product?,
     onBack: () -> Unit,
     onFavoritePressed: () -> Unit,
+    onAddToCartPressed: () -> Unit,
     isSaved: Boolean
 ) {
     Scaffold(
@@ -111,10 +113,12 @@ fun ProductDetailsView(
                     }
 
                     Button(
-                        onClick = {}, shape = RoundedCornerShape(30.dp)
+                        onClick = onAddToCartPressed,
+                        shape = RoundedCornerShape(30.dp)
                     ) {
                         Icon(
-                            Icons.Rounded.ShoppingCart, contentDescription = null
+                            imageVector = Icons.Rounded.ShoppingCart,
+                            contentDescription = null
                         )
                         Text("Add to cart")
                     }
@@ -140,8 +144,12 @@ fun ProductDetails(
             painter = rememberAsyncImagePainter(product.image),
             contentDescription = null,
             contentScale = ContentScale.Fit,
-            modifier = Modifier.background(Color.White).fillMaxWidth().clip(CircleShape)
-                .padding(14.dp).size(180.dp)
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxWidth()
+                .clip(CircleShape)
+                .padding(14.dp)
+                .size(180.dp)
         )
 
         Column(
