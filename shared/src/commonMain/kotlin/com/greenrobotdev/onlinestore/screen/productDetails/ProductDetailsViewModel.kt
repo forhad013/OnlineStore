@@ -19,7 +19,7 @@ class ProductDetailsViewModel(
   product : Product? = null
 ) : ViewModel(), KoinComponent {
   private val eventsFlow: MutableSharedFlow<ProductDetailsEvent> = MutableSharedFlow(5)
-  private val initialState: ProductDetailsState = savedState.get() ?: ProductDetailsState(product)
+  private val initialState: ProductDetailsState = savedState.get() ?: ProductDetailsState(product, numberOfProduct = 0)
 
   val states by lazy {
     moleculeFlow(Immediate) {
@@ -35,6 +35,13 @@ class ProductDetailsViewModel(
 
   fun onAddToCartPressed(){
     launch { eventsFlow.emit(ProductDetailsEvent.OnAddToCartPressed) }
+  }
+
+  fun onIncreaseCountPressed(){
+    launch { eventsFlow.emit(ProductDetailsEvent.OnIncreaseCountPressed) }
+  }
+  fun onDecreaseCountPressed(){
+    launch { eventsFlow.emit(ProductDetailsEvent.OnDecreaseCountPressed) }
   }
 
 }

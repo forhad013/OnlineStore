@@ -28,6 +28,7 @@ fun ProductDetailsUseCase(
     val isSaved: Boolean? by favoriteStore.updates
         .map { products -> products?.any { product -> product.id == initialState.product?.id } }
         .collectAsState(DontKnowYet)
+    val currentProduct: Product? = initialState.product
 
     val currentProductCartCount: Int? by cartStore.updates
         .map { cartItems ->
@@ -41,7 +42,6 @@ fun ProductDetailsUseCase(
             when (event) {
                 is ProductDetailsEvent.OnFavoritePressed -> launch(Dispatchers.Unconfined) {
                     favoriteStore.update { products ->
-                        val currentProduct: Product? = initialState.product
                         when {
                             currentProduct != null && isSaved == false -> products?.plus(currentProduct)
 
@@ -53,7 +53,6 @@ fun ProductDetailsUseCase(
                 }
                 is ProductDetailsEvent.OnAddToCartPressed -> launch(Dispatchers.Unconfined) {
                     cartStore.update { cartItems ->
-                        val currentProduct: Product? = initialState.product
                         when {
                             currentProduct != null && currentProductCartCount == 0 -> {
                                 cartItems?.plus(CartItem(quantity = 1, product = currentProduct))
@@ -63,9 +62,40 @@ fun ProductDetailsUseCase(
                         }
                     }
                 }
+                is ProductDetailsEvent.OnIncreaseCountPressed -> launch(Dispatchers.Unconfined) {
+                    currentProduct?.let {
+                        cartStore.update { cartItems ->
+                            cartItems?.map { item ->
+                                if(item.product.id == currentProduct.id){
+                                  return@map item.copy(quantity = item.quantity.plus(1))
+                                }
+                              return@map item
+                            }?.toSet()
+                        }
+                    }
+
+                }
+                is ProductDetailsEvent.OnDecreaseCountPressed -> launch(Dispatchers.Unconfined) {
+                    currentProduct?.let {
+                        cartStore.update { cartItems ->
+                            currentProductCartCount?.let {
+                                if(it == 1){
+                                    cartItems?.minus(CartItem(quantity = 1, product = currentProduct))
+                                }else{
+                                    cartItems?.map { item ->
+                                        if(item.product.id == currentProduct.id){
+                                            return@map item.copy(quantity = item.quantity.minus(1))
+                                        }
+                                        return@map item
+                                    }?.toSet()
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
-    return state.copy(isSaved = isSaved ?: false)
+    return state.copy(isSaved = isSaved ?: false, numberOfProduct = currentProductCartCount ?: 0)
 }

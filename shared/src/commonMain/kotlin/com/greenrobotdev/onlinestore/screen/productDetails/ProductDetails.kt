@@ -1,5 +1,8 @@
 package com.greenrobotdev.onlinestore.screen.productDetails
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -7,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,10 +20,13 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -35,12 +42,14 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.greenrobotdev.onlinestore.domain.entity.Product
 import com.greenrobotdev.onlinestore.utils.navigationBarPadding
 import com.seiko.imageloader.rememberAsyncImagePainter
@@ -61,10 +70,11 @@ fun ProductDetailsScreen(
 
     ProductDetailsView(
         onBack = onBack,
-        product = state.product,
+        state = state,
         onFavoritePressed = { viewModel.onFavoriteButtonPressed() },
         onAddToCartPressed = { viewModel.onAddToCartPressed() },
-        isSaved = state.isSaved,
+        onDecreaseCountPressed = { viewModel.onDecreaseCountPressed() },
+        onIncreaseCountPressed = { viewModel.onIncreaseCountPressed() }
     )
 
 }
@@ -72,11 +82,12 @@ fun ProductDetailsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailsView(
-    product: Product?,
+    state: ProductDetailsState,
     onBack: () -> Unit,
     onFavoritePressed: () -> Unit,
     onAddToCartPressed: () -> Unit,
-    isSaved: Boolean
+    onDecreaseCountPressed: () -> Unit,
+    onIncreaseCountPressed: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -98,46 +109,32 @@ fun ProductDetailsView(
                 modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBarPadding),
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-
-                    IconButton(
-                        onClick = onFavoritePressed,
-                    ) {
-                        Icon(
-                            imageVector = if (isSaved) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
-                            contentDescription = null
-                        )
-                    }
-
-                    Button(
-                        onClick = onAddToCartPressed,
-                        shape = RoundedCornerShape(30.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.ShoppingCart,
-                            contentDescription = null
-                        )
-                        Text("Add to cart")
-                    }
-
-                }
+                    CartButton(
+                        numberOfProductInCart = state.numberOfProduct,
+                        onAddToCartPressed = onAddToCartPressed,
+                        onDecreaseCountPressed = onDecreaseCountPressed,
+                        onIncreaseCountPressed = onIncreaseCountPressed
+                    )
             }
         }
     ) { scaffoldPadding ->
         Box(
             modifier = Modifier.padding(scaffoldPadding).wrapContentSize()
         ) {
-            if (product != null) ProductDetails(product)
+           if( state.product != null) ProductDetails(
+                product = state.product,
+                onFavoritePressed = onFavoritePressed,
+                isSaved = state.isSaved
+            )
         }
     }
 }
 
 @Composable
 fun ProductDetails(
-    product: Product
+    product: Product,
+    onFavoritePressed: () -> Unit,
+    isSaved: Boolean
 ) {
     Column {
         Image(
@@ -156,13 +153,30 @@ fun ProductDetails(
             modifier = Modifier.padding(12.dp)
         ) {
 
-            val price = "${'$'}${product.price.toInt()}"
-            Text(
-                text = price,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                val price = "${'$'}${product.price.toInt()}"
+                Text(
+                    text = price,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold
+                )
+
+                IconButton(
+                    onClick = onFavoritePressed,
+                ) {
+                    Icon(
+                        imageVector = if (isSaved) Icons.Rounded.Favorite else Icons.Rounded.FavoriteBorder,
+                        contentDescription = null
+                    )
+                }
+
+            }
+
             Text(
                 text = product.title,
                 style = MaterialTheme.typography.titleLarge,
@@ -186,5 +200,91 @@ fun ProductDetails(
                 modifier = Modifier.padding(4.dp)
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@Composable
+fun CartButton(
+    numberOfProductInCart: Int,
+    onAddToCartPressed: () -> Unit,
+    onIncreaseCountPressed: () -> Unit,
+    onDecreaseCountPressed: () -> Unit,
+) {
+    AnimatedVisibility(visible = numberOfProductInCart == 0){
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onAddToCartPressed,
+            shape = RoundedCornerShape(30.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.ShoppingCart,
+                contentDescription = null
+            )
+            Text("Add to cart")
+        }
+    }
+
+    AnimatedVisibility(visible = numberOfProductInCart != 0){
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ){
+            Button(
+                modifier = Modifier.weight(.5f).padding(4.dp),
+                onClick = onDecreaseCountPressed,
+                shape = RoundedCornerShape(30.dp)
+            ) {
+                Text(
+                    text = "-",
+                    fontSize = 22.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(start = 10.dp))
+            BadgedBox(
+                badge = {
+                    Badge(
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    ) {
+                        AnimatedContent(targetState = numberOfProductInCart){
+                            Text(numberOfProductInCart.toString())
+                        }
+
+                    }
+                }
+            ) {
+                Image(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.inversePrimary)
+                        .padding(8.dp),
+                    imageVector = Icons.Filled.ShoppingCart,
+                    contentDescription = "Cart"
+                )
+            }
+            Spacer(modifier = Modifier.padding(start = 10.dp))
+
+            Button(
+                modifier = Modifier.weight(.5f).padding(4.dp),
+                onClick = onIncreaseCountPressed,
+                shape = RoundedCornerShape(30.dp)
+            ) {
+                Text(
+                    text = "+",
+                    fontSize = 22.sp
+                )
+            }
+        }
+        }
+
+}
+
+fun Modifier.conditional(condition : Boolean, modifier : Modifier.() -> Modifier) : Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
     }
 }

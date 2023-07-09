@@ -1,12 +1,15 @@
 package com.greenrobotdev.onlinestore.screen.cart
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +18,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,8 +44,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.greenrobotdev.onlinestore.domain.entity.CartItem
 import com.greenrobotdev.onlinestore.domain.entity.Product
 import com.seiko.imageloader.rememberAsyncImagePainter
@@ -119,7 +128,7 @@ fun CartProductList(
     onProductSelect: (product: Product) -> Unit,
 ) {
     LazyColumn (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(8.dp)
     ) {
         items(products) { cartItem ->
             CartItem(
@@ -130,7 +139,7 @@ fun CartProductList(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun CartItem(
     item: CartItem,
@@ -139,14 +148,15 @@ fun CartItem(
     Card(
         onClick = { onProductSelect(item) },
         shape = MaterialTheme.shapes.small,
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(8.dp).background(MaterialTheme.colorScheme.tertiaryContainer),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         )
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = rememberAsyncImagePainter(item.product.image),
@@ -169,8 +179,9 @@ fun CartItem(
                 )
 
                 Row(
+                    modifier = Modifier.fillMaxHeight(),
                     verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.fillMaxHeight()
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     val price = "${'$'}${item.product.price.toInt()}"
 
@@ -179,8 +190,74 @@ fun CartItem(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
+
                 }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth() ,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Row(
+                        modifier = Modifier.weight(0.5f),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        CartItemButton(
+                            modifier = Modifier
+                                .width(40.dp) ,
+                            title = "-",
+                            onClick = { }
+                        )
+                        AnimatedContent(targetState = item.quantity){
+                            Text(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .align(Alignment.CenterVertically)
+                                    .padding(8.dp) ,
+                                textAlign = TextAlign.Center,
+                                text = item.quantity.toString()
+                            )
+                        }
+
+                        CartItemButton( modifier = Modifier
+                            .width(40.dp) ,
+                            title = "+",
+                            onClick = { }
+                        )
+                    }
+
+                    Button(
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                        )
+                    ){
+                        Text("Remove")
+                    }
+                }
+
+
             }
         }
+    }
+}
+
+@Composable
+internal fun CartItemButton(
+    modifier: Modifier = Modifier,
+    title : String,
+    onClick: () -> Unit,
+){
+    TextButton(
+        modifier = modifier,
+        onClick = {},
+        shape = MaterialTheme.shapes.small,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
+    ){
+        Text(text= title, fontSize = 22.sp)
     }
 }

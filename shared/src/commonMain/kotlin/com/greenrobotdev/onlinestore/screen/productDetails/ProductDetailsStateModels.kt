@@ -10,13 +10,16 @@ val DontKnowYet: Nothing? = null
 @Parcelize
 data class ProductDetailsState(
   val product: Product? = Loading,
-  val isSaved: Boolean = false
+  val isSaved: Boolean = false,
+  val numberOfProduct : Int,
 ) : Parcelable
 
 
 sealed interface ProductDetailsEvent {
   object OnFavoritePressed: ProductDetailsEvent
   object OnAddToCartPressed: ProductDetailsEvent
+  object OnDecreaseCountPressed: ProductDetailsEvent
+  object OnIncreaseCountPressed: ProductDetailsEvent
 }
 
 
