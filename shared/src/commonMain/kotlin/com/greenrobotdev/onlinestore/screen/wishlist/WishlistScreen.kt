@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.greenrobotdev.onlinestore.domain.entity.Product
+import com.greenrobotdev.onlinestore.ui.EmptyView
 import com.seiko.imageloader.rememberAsyncImagePainter
 import io.github.xxfast.decompose.router.rememberViewModel
 
@@ -95,6 +97,8 @@ fun WishlistView(
                 onProductSelect = onProductSelect
             )
 
+            println( "forhad ${state.products.toString()}")
+
             AnimatedVisibility(
                 visible = state.products == nothing,
                 enter = fadeIn(),
@@ -103,7 +107,7 @@ fun WishlistView(
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    Text("Such empty")
+                    EmptyView("Your wishlist is empty",Icons.Filled.List)
                 }
             }
         }

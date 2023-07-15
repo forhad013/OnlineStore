@@ -3,6 +3,8 @@ package com.greenrobotdev.onlinestore.screen.productDetails
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +22,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Favorite
@@ -49,7 +53,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.greenrobotdev.onlinestore.domain.entity.Product
 import com.greenrobotdev.onlinestore.utils.navigationBarPadding
 import com.seiko.imageloader.rememberAsyncImagePainter
@@ -109,19 +112,19 @@ fun ProductDetailsView(
                 modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBarPadding),
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
-                    CartButton(
-                        numberOfProductInCart = state.numberOfProduct,
-                        onAddToCartPressed = onAddToCartPressed,
-                        onDecreaseCountPressed = onDecreaseCountPressed,
-                        onIncreaseCountPressed = onIncreaseCountPressed
-                    )
+                CartButton(
+                    numberOfProductInCart = state.numberOfProduct,
+                    onAddToCartPressed = onAddToCartPressed,
+                    onDecreaseCountPressed = onDecreaseCountPressed,
+                    onIncreaseCountPressed = onIncreaseCountPressed
+                )
             }
         }
     ) { scaffoldPadding ->
         Box(
             modifier = Modifier.padding(scaffoldPadding).wrapContentSize()
         ) {
-           if( state.product != null) ProductDetails(
+            if (state.product != null) ProductDetails(
                 product = state.product,
                 onFavoritePressed = onFavoritePressed,
                 isSaved = state.isSaved
@@ -211,7 +214,11 @@ fun CartButton(
     onIncreaseCountPressed: () -> Unit,
     onDecreaseCountPressed: () -> Unit,
 ) {
-    AnimatedVisibility(visible = numberOfProductInCart == 0){
+    AnimatedVisibility(
+        visible = numberOfProductInCart == 0,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = onAddToCartPressed,
@@ -225,21 +232,22 @@ fun CartButton(
         }
     }
 
-    AnimatedVisibility(visible = numberOfProductInCart != 0){
+    AnimatedVisibility(
+        visible = numberOfProductInCart != 0,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
-        ){
+        ) {
             Button(
                 modifier = Modifier.weight(.5f).padding(4.dp),
                 onClick = onDecreaseCountPressed,
                 shape = RoundedCornerShape(30.dp)
             ) {
-                Text(
-                    text = "-",
-                    fontSize = 22.sp
-                )
+                Icon(imageVector = Icons.Filled.Remove, contentDescription = null)
             }
 
             Spacer(modifier = Modifier.padding(start = 10.dp))
@@ -248,7 +256,7 @@ fun CartButton(
                     Badge(
                         modifier = Modifier.align(Alignment.TopCenter)
                     ) {
-                        AnimatedContent(targetState = numberOfProductInCart){
+                        AnimatedContent(targetState = numberOfProductInCart) {
                             Text(numberOfProductInCart.toString())
                         }
 
@@ -271,17 +279,14 @@ fun CartButton(
                 onClick = onIncreaseCountPressed,
                 shape = RoundedCornerShape(30.dp)
             ) {
-                Text(
-                    text = "+",
-                    fontSize = 22.sp
-                )
+                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
             }
         }
-        }
+    }
 
 }
 
-fun Modifier.conditional(condition : Boolean, modifier : Modifier.() -> Modifier) : Modifier {
+fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
     return if (condition) {
         then(modifier(Modifier))
     } else {

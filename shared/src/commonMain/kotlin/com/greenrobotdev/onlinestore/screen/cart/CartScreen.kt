@@ -1,56 +1,46 @@
 package com.greenrobotdev.onlinestore.screen.cart
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingCartCheckout
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.greenrobotdev.onlinestore.domain.entity.CartItem
 import com.greenrobotdev.onlinestore.domain.entity.Product
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.greenrobotdev.onlinestore.ui.EmptyView
+import com.greenrobotdev.onlinestore.utils.navigationBarPadding
 import io.github.xxfast.decompose.router.rememberViewModel
 
 @Composable
@@ -67,8 +57,15 @@ fun CartScreen(
 
     CartView(
         state = state,
-        onProductSelect = onProductSelect,
-        onBack = onBack
+        onViewProductDetails = onProductSelect,
+        onBack = onBack,
+        addQuantity = { viewModel.onAddQuantity(it) },
+        removeQuantity = { viewModel.onDecreaseQuantity(it) },
+        removeProduct = { viewModel.onRemoveProduct(it) },
+        onSelectProduct = { cartItem, isSelected ->
+            println("is")
+            viewModel.onSelectProduct(cartItem, isSelected)
+        }
     )
 
 }
@@ -77,10 +74,16 @@ fun CartScreen(
 @Composable
 fun CartView(
     state: CartState,
-    onProductSelect: (product: Product) -> Unit,
-    onBack: () -> Unit
+    onViewProductDetails: (product: Product) -> Unit,
+    onBack: () -> Unit,
+    onSelectProduct: (cartItem: CartItem, isSelected: Boolean) -> Unit,
+    addQuantity: (cartItem: CartItem) -> Unit,
+    removeQuantity: (cartItem: CartItem) -> Unit,
+    removeProduct: (cartItem: CartItem) -> Unit,
 ) {
+
     Scaffold(
+        modifier = Modifier,
         topBar = {
             TopAppBar(
                 title = { Text("Shopping cart") },
@@ -93,7 +96,18 @@ fun CartView(
                 }
             )
         },
-        modifier = Modifier
+        bottomBar = {
+            BottomAppBar(
+                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBarPadding),
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
+                CartProceedView(
+                    numberOfSelectedProduct = state.selectedCarts.size,
+                    onProceedPressed = {}
+                )
+            }
+        }
     ) { scaffoldPadding ->
         Column(
             modifier = Modifier
@@ -102,20 +116,25 @@ fun CartView(
                 .padding(scaffoldPadding)
         ) {
 
-            if (state.products != nothing) CartProductList(
-                products = state.products,
-                onProductSelect = onProductSelect
+            if (state.cartItems != nothing) CartProductList(
+                cartItems = state.cartItems,
+                selectedCartItems = state.selectedCarts,
+                onSelectProduct = onSelectProduct,
+                onViewProductDetails = onViewProductDetails,
+                addQuantity = addQuantity,
+                removeQuantity = removeQuantity,
+                removeProduct = removeProduct,
             )
 
             AnimatedVisibility(
-                visible = state.products == nothing,
+                visible = state.cartItems == nothing,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    Text("Such empty")
+                    EmptyView("You cart is empty", Icons.Filled.ShoppingCartCheckout)
                 }
             }
         }
@@ -124,140 +143,52 @@ fun CartView(
 
 @Composable
 fun CartProductList(
-    products: List<CartItem>,
-    onProductSelect: (product: Product) -> Unit,
+    cartItems: List<CartItem>,
+    selectedCartItems: List<CartItem>,
+    onSelectProduct: (cartItem: CartItem, isSelected: Boolean) -> Unit,
+    onViewProductDetails: (product: Product) -> Unit,
+    addQuantity: (cartItem: CartItem) -> Unit,
+    removeQuantity: (cartItem: CartItem) -> Unit,
+    removeProduct: (cartItem: CartItem) -> Unit,
 ) {
-    LazyColumn (
+    LazyColumn(
         modifier = Modifier.fillMaxSize().padding(8.dp)
     ) {
-        items(products) { cartItem ->
+
+        items(cartItems) { cartItem ->
             CartItem(
                 item = cartItem,
-                onProductSelect = { onProductSelect(cartItem.product) }
+                isChecked = selectedCartItems.contains(cartItem),
+                onSelectProduct = { onSelectProduct(cartItem, it) },
+                onViewProductDetails = { onViewProductDetails(cartItem.product) },
+                addQuantity = { addQuantity(cartItem) },
+                removeQuantity = { removeQuantity(cartItem) },
+                removeProduct = { removeProduct(cartItem) }
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun CartItem(
-    item: CartItem,
-    onProductSelect: (cartItem: CartItem) -> Unit,
+fun CartProceedView(
+    numberOfSelectedProduct: Int,
+    onProceedPressed: () -> Unit,
 ) {
-    Card(
-        onClick = { onProductSelect(item) },
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier.padding(8.dp).background(MaterialTheme.colorScheme.tertiaryContainer),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp
-        )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        Text("$numberOfSelectedProduct item selected")
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        Button(
+            modifier = Modifier.padding(4.dp),
+            onClick = onProceedPressed,
+            shape = RoundedCornerShape(30.dp)
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(item.product.image),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .background(Color.White)
-                    .size(100.dp)
-            )
-
-            Column(
-                modifier = Modifier.padding(6.dp),
-            ) {
-                Text(
-                    text = item.product.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Light
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    val price = "${'$'}${item.product.price.toInt()}"
-
-                    Text(
-                        text = price,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth() ,
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Row(
-                        modifier = Modifier.weight(0.5f),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        CartItemButton(
-                            modifier = Modifier
-                                .width(40.dp) ,
-                            title = "-",
-                            onClick = { }
-                        )
-                        AnimatedContent(targetState = item.quantity){
-                            Text(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .align(Alignment.CenterVertically)
-                                    .padding(8.dp) ,
-                                textAlign = TextAlign.Center,
-                                text = item.quantity.toString()
-                            )
-                        }
-
-                        CartItemButton( modifier = Modifier
-                            .width(40.dp) ,
-                            title = "+",
-                            onClick = { }
-                        )
-                    }
-
-                    Button(
-                        onClick = {},
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.tertiary,
-                        )
-                    ){
-                        Text("Remove")
-                    }
-                }
-
-
-            }
+            Text("Proceed")
         }
     }
-}
 
-@Composable
-internal fun CartItemButton(
-    modifier: Modifier = Modifier,
-    title : String,
-    onClick: () -> Unit,
-){
-    TextButton(
-        modifier = modifier,
-        onClick = {},
-        shape = MaterialTheme.shapes.small,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
-            contentColor = MaterialTheme.colorScheme.onSurface
-        )
-    ){
-        Text(text= title, fontSize = 22.sp)
-    }
 }

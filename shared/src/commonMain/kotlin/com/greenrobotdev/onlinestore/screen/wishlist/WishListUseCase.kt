@@ -19,7 +19,7 @@ fun WishListUseCase(
     val state by remember { mutableStateOf(initialState) }
 
     val products: List<Product>? by store.updates.map {
-        it?.toList() ?: nothing
+        if(it?.size == 0) nothing else it?.toList()
     }.collectAsState(DontKnowYet)
 
     return state.copy(products = products)

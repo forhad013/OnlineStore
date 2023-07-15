@@ -65,6 +65,7 @@ kotlin {
                     implementation(foundation)
                     implementation(material3)
                     implementation(runtime)
+                    implementation(materialIconsExtended)
                 }
 
                 with(libs) {
