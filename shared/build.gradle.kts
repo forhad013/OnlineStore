@@ -1,21 +1,24 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-
 plugins {
-    alias(libs.plugins.multiplatfrom)
-    alias(libs.plugins.compose)
-    alias(libs.plugins.cocoapods)
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.serialization)
-    id("kotlin-kapt")
+    kotlin("multiplatform")
+    kotlin("native.cocoapods")
+    id("com.android.library")
+    id("org.jetbrains.compose")
+    id ("kotlin-kapt")
+    kotlin("plugin.serialization")
     id("com.squareup.sqldelight")
     id("kotlin-parcelize")
+}
+
+compose {
+    kotlinCompilerPlugin.set(dependencies.compiler.forKotlin("1.8.20"))
+    kotlinCompilerPluginArgs.add("suppressKotlinVersionCompatibilityCheck=1.8.21")
 }
 
 kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }
@@ -62,6 +65,7 @@ kotlin {
                     implementation(foundation)
                     implementation(material3)
                     implementation(runtime)
+                    implementation(materialIconsExtended)
                 }
 
                 with(libs) {
@@ -74,7 +78,20 @@ kotlin {
                     implementation(ktor.logging)
                     implementation(sql.delight.runtime)
                     implementation(koin.core)
+                    implementation(decompose.router)
+                    implementation(molecule.runtime)
+                    implementation(kstore)
+                    implementation(swipe.refresh)
                 }
+
+                with(libs.arkivanov){
+                    implementation(decompose)
+                    implementation(decompose.extension)
+                    implementation(lifecycle)
+                    implementation(parcelable)
+                }
+
+                implementation(libs.qdsfdhvh.image.loader)
             }
         }
         val commonTest by getting {
@@ -87,6 +104,7 @@ kotlin {
                 implementation(libs.ktor.client.andriod)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.sql.delight.android)
+                implementation(libs.kstore.file)
             }
         }
         val androidUnitTest by getting
@@ -97,7 +115,8 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.ios)
                 implementation(libs.sql.delight.ios)
-                implementation(libs.lifecycle)
+                implementation(libs.kstore.file)
+                implementation(libs.swipe.refresh)
             }
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
@@ -149,25 +168,33 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlin {
         jvmToolchain(11)
     }
     kapt {
         correctErrorTypes = true
     }
+
+    val sqldelight_db_name = "StoreDatabase"
+    val sqldelight_db_package_name = "com.greenrobotdev.onlinestore.shared.cache"
+    val sqldelight_db_sourceset = "sqldelight"
+
+    sqldelight {
+        database(sqldelight_db_name) {
+            packageName = sqldelight_db_package_name
+            sourceFolders = listOf(sqldelight_db_sourceset)
+        }
+    }
 }
 
-val sqldelight_db_name = "StoreDatabase"
-val sqldelight_db_package_name = "com.example.templatekmm.shared.cache"
-val sqldelight_db_sourceset = "sqldelight"
 
-sqldelight {
-    database(sqldelight_db_name) {
-        packageName = sqldelight_db_package_name
-        sourceFolders = listOf(sqldelight_db_sourceset)
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs::class.java).configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 

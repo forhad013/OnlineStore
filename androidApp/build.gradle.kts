@@ -2,7 +2,11 @@
     id("com.android.application")
     kotlin("android")
     id("org.jetbrains.compose")
-}
+
+     kotlin("plugin.serialization")
+     id("kotlin-parcelize")
+     id( "kotlin-kapt")
+ }
 
 android {
     namespace = "com.greenrobotdev.onlinestore.android"
@@ -18,7 +22,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
     packaging {
         resources {
@@ -31,14 +35,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     tasks.withType<JavaCompile> {
-        options.compilerArgs.addAll(arrayOf("--release", "11"))
+        options.compilerArgs.addAll(arrayOf("--release", "17"))
     }
 }
 
@@ -54,5 +58,8 @@ dependencies {
         implementation(runtime)
     }
     implementation(libs.compose.activity)
+    implementation(libs.swipe.refresh)
     implementation(libs.koin.android)
+    implementation(libs.decompose.router)
+    implementation(libs.arkivanov.decompose)
 }

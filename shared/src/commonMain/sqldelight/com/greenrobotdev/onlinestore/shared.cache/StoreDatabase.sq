@@ -10,12 +10,12 @@ CREATE TABLE Product (
 );
 
 
-insertMovielist:
+insertProductist:
 INSERT OR REPLACE INTO Product(id, title, price, image, description, category, rate, count)
 VALUES(?, ?, ?, ?, ?,?, ?, ?);
 
-removeMovielist:
+removeProductlist:
 DELETE FROM Product;
 
-getMovielist:
+getProductlist:
 SELECT *FROM Product;
