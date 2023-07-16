@@ -22,9 +22,8 @@ class CartViewModel(
   val states by lazy {
     moleculeFlow(Immediate) {
       CartUseCase(initialState, cartStore, eventsFlow)
-    }
-      .onEach { state -> savedState.set(state) }
-      .stateIn(this, SharingStarted.Eagerly, initialState)
+    }.onEach { state -> savedState.set(state) }
+      .stateIn(this, SharingStarted.Lazily, initialState)
   }
 
   fun onRemoveProduct(cartItem: CartItem){

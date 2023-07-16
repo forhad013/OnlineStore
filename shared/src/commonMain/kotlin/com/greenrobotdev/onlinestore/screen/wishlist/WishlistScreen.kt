@@ -97,8 +97,6 @@ fun WishlistView(
                 onProductSelect = onProductSelect
             )
 
-            println( "forhad ${state.products.toString()}")
-
             AnimatedVisibility(
                 visible = state.products == nothing,
                 enter = fadeIn(),

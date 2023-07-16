@@ -219,7 +219,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs::class.java).
 
 //tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile::class.java).all {
 //    if (name.contains("linkPodDebugFrameworkIosArm64")) {
-//        print("mugamba $name")
 //        kotlinOptions {
 //            allWarningsAsErrors = false
 //            enabled = false

@@ -63,7 +63,6 @@ fun CartScreen(
         removeQuantity = { viewModel.onDecreaseQuantity(it) },
         removeProduct = { viewModel.onRemoveProduct(it) },
         onSelectProduct = { cartItem, isSelected ->
-            println("is")
             viewModel.onSelectProduct(cartItem, isSelected)
         }
     )
@@ -97,7 +96,7 @@ fun CartView(
             )
         },
         bottomBar = {
-            BottomAppBar(
+            if(!state.cartItems.isNullOrEmpty()) BottomAppBar(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBarPadding),
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,

@@ -33,8 +33,9 @@ fun CartUseCase(
         events.collect { event ->
             when (event) {
                 is CartEvent.OnRemove -> launch(Dispatchers.Unconfined) {
-                    val selectedCartItem: CartItem = event.cartItem
-                    cartStore.update { cartItems -> cartItems?.minus(selectedCartItem) }
+                    val currentCartItem: CartItem = event.cartItem
+                    cartStore.update { cartItems -> cartItems?.minus(currentCartItem) }
+                    selectedCartItems = selectedCartItems.minus(currentCartItem)
                 }
 
                 is CartEvent.OnIncreaseQt -> launch(Dispatchers.Unconfined) {
