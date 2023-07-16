@@ -50,7 +50,6 @@ fun ProductListUseCase(
 
     LaunchedEffect(Unit) {
         events.collect { event ->
-            println(event.toString())
             when (event) {
                 ProductListEvent.Refresh -> refreshes++
             }
